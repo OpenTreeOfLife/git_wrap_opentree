@@ -38,7 +38,6 @@ class TestConstGitRepo(unittest.TestCase):
         recent = self.cgr.commits_after(after_sha='b81559ac853219345fd2a893641fd6226b851792')
         init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
         self.assertEqual(all_c, init_two + recent)
-        print(self.cgr.files_touched(recent[-1]))
     
     def testFilesChanged(self):
         init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
