@@ -10,6 +10,13 @@ the git db. They do not checkout, or switch branches...
 import pygit2
 import os
 
+_EMPTY_TREE_OID = None
+def empty_tree_oid(repository=None):
+    global _EMPTY_TREE_OID
+    if _EMPTY_TREE_OID is None:
+        _EMPTY_TREE_OID = repository.TreeBuilder().write()
+    return _EMPTY_TREE_OID
+
 class ConstGitRepo(object):
     def __init__(self, repo_top=None, git_dir=None):
         self._repo_top = None
@@ -35,6 +42,7 @@ class ConstGitRepo(object):
         if not os.path.isdir(self.git_dir):
             raise ValueError('Expected git_dir "{}" to be a directory'.format(self.git_dir))
         self._repo = pygit2.Repository(self.git_dir)
+        empty_tree_oid(self._repo)
 
     @property
     def git_dir(self):
@@ -65,3 +73,18 @@ class ConstGitRepo(object):
         return r[::-1]
     
     
+    def files_touched(self, commit):
+        """Returns an iterable of pairs of (path-from-top, object ids) of files
+        changed by a commit.
+
+        """
+        if commit.parents:
+            par_list = commit.parents
+        else:
+            par_list = [empty_tree_oid()]
+        new_oid_set = set()
+        for p in par_list:
+            diff = self._repo.diff(p, commit)
+            for dd in diff.deltas:
+                new_oid_set.add((dd.new_file.path, dd.new_file.id))
+        return new_oid_set

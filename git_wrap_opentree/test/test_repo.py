@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 import logging
-from git_wrap_opentree import (ConstGitRepo, path_blob_pairs_in_commit)
+from git_wrap_opentree import ConstGitRepo
 from git_wrap_opentree.test.support.pathmap import get_test_path_mapper as ntest_path_mapper
 import os
 
@@ -35,11 +35,10 @@ class TestConstGitRepo(unittest.TestCase):
 
     def testCommitsAfter(self):
         all_c = self.cgr.commits_after()
-        recent = self.cgr.commits_after(after_sha='344c2d367a68603')
-        init_two = self.cgr.commits_after(until_sha='344c2d367a68603')
+        recent = self.cgr.commits_after(after_sha='b81559ac853219345fd2a893641fd6226b851792')
+        init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
         self.assertEqual(all_c, init_two + recent)
-        for p, o in path_blob_pairs_in_commit(init_two[0]):
-            print(o.filemode, p, o.name)
+        print(self.cgr.files_touched(init_two[0]))
 
 if __name__ == "__main__":
     unittest.main()
