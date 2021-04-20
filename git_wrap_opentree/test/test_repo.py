@@ -38,7 +38,16 @@ class TestConstGitRepo(unittest.TestCase):
         recent = self.cgr.commits_after(after_sha='b81559ac853219345fd2a893641fd6226b851792')
         init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
         self.assertEqual(all_c, init_two + recent)
-        print(self.cgr.files_touched(init_two[0]))
+        print(self.cgr.files_touched(recent[-1]))
+    
+    def testFilesChanged(self):
+        init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
+        fc = list(self.cgr.files_touched(init_two[1]))
+        self.assertEqual(len(fc), 1)
+        ffc = fc[0]
+        self.assertEqual(ffc[0], 'git_wrap_opentree/__init__.py')
+        self.assertEqual(str(ffc[1]), 'a9324baad960d032b8bd3400a323539d7e594ed8')
+
 
 if __name__ == "__main__":
     unittest.main()

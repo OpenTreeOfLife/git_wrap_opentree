@@ -57,7 +57,7 @@ class ConstGitRepo(object):
 
         Sorted oldest to newest.
         If after_sha is None, it defaults to the initial commit.
-        If until_sha is None, it default so the HEAD.
+        If until_sha is None, it defaults to the HEAD.
         """
         if after_sha is not None:
             after_sha = after_sha.strip()
@@ -77,6 +77,8 @@ class ConstGitRepo(object):
         """Returns an iterable of pairs of (path-from-top, object ids) of files
         changed by a commit.
 
+        object id 0000000000000000000000000000000000000000
+        will be returned if a file is removed.
         """
         if commit.parents:
             par_list = commit.parents
