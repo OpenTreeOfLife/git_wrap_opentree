@@ -10,7 +10,13 @@ for interacting with git used by the [Open Tree of Life][1] project.
 It is one of the packages that used to make up a part of
 [peyotl](https://github.com/OpenTreeOfLife/peyotl).
 This package probably not of great use to external developers by itself, it
-is a prerequisite for the Open Tree of Life softward. 
+is a prerequisite for the Open Tree of Life software.
+
+
+[pygit2](https://github.com/libgit2/pygit2) is doing most of the 
+heavy lifting here.
+This package just provides terse methods for some git operations that Open Tree uses frequently.
+
 
 Instructions
 ------------
