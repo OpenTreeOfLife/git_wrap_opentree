@@ -9,7 +9,9 @@ from __future__ import absolute_import, print_function, division
 
 __version__ = '0.0.1a'  # sync with setup.py
 
+from .git_repo import ConstGitRepo
 
 
-__all__ = ['test', 
+__all__ = ['git_repo', 
+           'test', 
            ]
