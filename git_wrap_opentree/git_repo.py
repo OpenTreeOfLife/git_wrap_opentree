@@ -44,10 +44,24 @@ class ConstGitRepo(object):
     def repo_top(self):
         return self._repo_top
 
-    def commits_after(self, sha=None):
-        # if sha is None:
-        #     sha = repo.head.target
-        for c in self._repo.walk():
-            print(c)
+    def commits_after(self, after_sha=None, until_sha=None):
+        """Returns commits (after_sha, until_sha].
+
+        Sorted oldest to newest.
+        If after_sha is None, it defaults to the initial commit.
+        If until_sha is None, it default so the HEAD.
+        """
+        if after_sha is not None:
+            after_sha = after_sha.strip()
+            if not after_sha:
+                after_sha = None
+        if not until_sha:
+            until_sha = self._repo.head.target
+        r = []
+        for c in self._repo.walk(until_sha, pygit2.GIT_SORT_TIME):
+            if after_sha is not None and c.hex.startswith(after_sha):
+                break
+            r.append(c)
+        return r[::-1]
     
     
