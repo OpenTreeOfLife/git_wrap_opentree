@@ -11,11 +11,18 @@ import pygit2
 import os
 
 _EMPTY_TREE_OID = None
+_EMPTY_OID = None
 def empty_tree_oid(repository=None):
     global _EMPTY_TREE_OID
     if _EMPTY_TREE_OID is None:
         _EMPTY_TREE_OID = repository.TreeBuilder().write()
     return _EMPTY_TREE_OID
+
+def null_oid():
+    global _EMPTY_OID
+    if _EMPTY_OID is None:
+        _EMPTY_OID = pygit2.Oid(hex='0000000000000000000000000000000000000000')
+    return _EMPTY_OID
 
 class ConstGitRepo(object):
     def __init__(self, repo_top=None, git_dir=None):
@@ -77,7 +84,7 @@ class ConstGitRepo(object):
         """Returns an iterable of pairs of (path-from-top, object ids) of files
         changed by a commit.
 
-        object id 0000000000000000000000000000000000000000
+        object id O
         will be returned if a file is removed.
         """
         if commit.parents:
@@ -90,3 +97,8 @@ class ConstGitRepo(object):
             for dd in diff.deltas:
                 new_oid_set.add((dd.new_file.path, dd.new_file.id))
         return new_oid_set
+
+    def get_file_contents(self, oid, encoding='utf-8'):
+        if oid == null_oid():
+            return ''
+        return self._repo.get(oid).data.decode(encoding)

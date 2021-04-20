@@ -38,7 +38,7 @@ class TestConstGitRepo(unittest.TestCase):
         recent = self.cgr.commits_after(after_sha='b81559ac853219345fd2a893641fd6226b851792')
         init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
         self.assertEqual(all_c, init_two + recent)
-    
+
     def testFilesChanged(self):
         init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
         fc = list(self.cgr.files_touched(init_two[1]))
@@ -47,6 +47,30 @@ class TestConstGitRepo(unittest.TestCase):
         self.assertEqual(ffc[0], 'git_wrap_opentree/__init__.py')
         self.assertEqual(str(ffc[1]), 'a9324baad960d032b8bd3400a323539d7e594ed8')
 
+    def testGetFileContents(self):
+        init_two = self.cgr.commits_after(until_sha='b81559ac853219345fd2a893641fd6226b851792')
+        oid = list(self.cgr.files_touched(init_two[1]))[0][1]
+        fc = self.cgr.get_file_contents(oid)
+        self.assertEqual(_FC_EXP, fc)
+
+_FC_EXP = u'''#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Simple utility functions used by Open Tree python code.
+
+These function are used by packages that descend from peyotl, but
+do not depend on any part of peyotl.
+"""
+from __future__ import absolute_import, print_function, division
+
+__version__ = '0.0.1a'  # sync with setup.py
+
+from .git_repo import ConstGitRepo
+
+
+__all__ = ['git_repo', 
+           'test', 
+           ]
+'''
 
 if __name__ == "__main__":
     unittest.main()
