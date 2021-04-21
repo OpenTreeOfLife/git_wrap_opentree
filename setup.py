@@ -63,7 +63,7 @@ else:
 
 setup(
     name='git_wrap_opentree',
-    version='0.0.1a',  # sync with __version__ in git_wrap_opentree/__init__.py
+    version='0.0.1a0',  # sync with __version__ in git_wrap_opentree/__init__.py
     description='Wrappers for git commands used by Open Tree of Life python tools',
     long_description=(open('README.rst').read()),
     url='https://github.com/OpenTreeOfLife/git-wrap-opentree',
@@ -74,6 +74,7 @@ setup(
     install_requires=['setuptools',
                       'wheel',
                       'peyutil>=0.0.4',
+                      'pygit2>=1.5.0',
                       ],
     packages=PACKAGES,
     entry_points=ENTRY_POINTS,
