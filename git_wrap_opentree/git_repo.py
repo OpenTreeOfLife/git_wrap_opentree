@@ -74,7 +74,7 @@ class ConstGitRepo(object):
             until_sha = self._repo.head.target
         r = []
         for c in self._repo.walk(until_sha, pygit2.GIT_SORT_TIME):
-            if after_sha is not None and str(c.tree_id).startswith(after_sha):
+            if after_sha is not None and str(c.id).startswith(after_sha):
                 break
             r.append(c)
         return r[::-1]
